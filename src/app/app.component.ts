@@ -76,13 +76,14 @@ export class AppComponent implements OnInit {
   handleMouseDown(e: MouseEvent) {
     this.mouse = this.getMousePos(this.canvas, e);
     const isValidSelection = this.context.isPointInStroke(this.mouse.x, this.mouse.y);
-    // console.log(isValidSelection);
+    console.log(isValidSelection);
     if (isValidSelection) {
       this.draggable = true;
       if (!this.polygonCoordinates.contains({ x: this.mouse.x, y: this.mouse.y })) {
         console.log('true-----');
         this.polygonCoordinates.push({ x: this.mouse.x, y: this.mouse.y });
         console.log(this.polygonCoordinates);
+        this.drawPin(this.context, this.polygonCoordinates.length, this.polygonCoordinates, true, 5);
       }
 
       // this.drawPolygon();
@@ -117,7 +118,7 @@ export class AppComponent implements OnInit {
       this.polygonCoordinates[this.polygonCoordinates.length - 1].x = this.mouse.x;
       this.polygonCoordinates[this.polygonCoordinates.length - 1].y = this.mouse.y;
       this.drawPolygon();
-      // this.drawPin(this.context, this.coordinates.length, this.coordinates);
+      this.drawPin(this.context, this.polygonCoordinates.length, this.polygonCoordinates, true, 5);
     }
   }
 
@@ -147,6 +148,7 @@ export class AppComponent implements OnInit {
     shadow: boolean = false,
     pinRadius: number = 6) {
     for (let index = 0; index < numPin; index++) {
+      context.lineWidth = 2;
       context.strokeStyle = "white";
       context.beginPath();
       context.arc(coordinates[index].x, coordinates[index].y, pinRadius, 0, 2 * Math.PI);

@@ -109,6 +109,22 @@ export class AppComponent implements OnInit {
   handleMouseUp() {
     if (this.draggable) {
       this.draggable = false;
+      if(this.pinCoordinates.contains(this.polygonCoordinates[this.polygonCoordinates.length - 1])){
+        this.drawPolygon();
+      } else {
+        this.polygonCoordinates.splice(this.polygonCoordinates.length - 1, 1);
+        if(this.polygonCoordinates.length === 2){
+          const midPos = Math.floor(this.pinCoordinates.length / 2);
+          this.drawBand(this.context,
+            this.pinCoordinates[midPos].x - this.pinRadius + 2,
+            this.pinCoordinates[midPos].y - this.pinRadius + 1,
+            10,
+            Math.floor(this.canvas.getBoundingClientRect().height / this.numOfPin) - 2);
+        } else {
+          this.drawPolygon();
+        }
+        
+      }
     }
   }
 
@@ -203,10 +219,10 @@ export class AppComponent implements OnInit {
   }
 
   drawBand(context: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
-
+    this.context.clearRect(0, 0, this.cw, this.ch);
     context.beginPath();
     context.strokeStyle = "orange";
-    context.lineWidth = 4;
+    context.lineWidth = 2;
 
     context.moveTo(x, y + h / 8);
     context.lineTo(x, y + h - h / 8);
@@ -215,8 +231,8 @@ export class AppComponent implements OnInit {
 
     context.stroke();
     context.shadowColor = "black";
-    context.shadowOffsetX = 2;
-    context.shadowBlur = 7;
+    context.shadowOffsetX = 0;
+    context.shadowBlur = 0;
     context.closePath();
   }
 }
@@ -231,9 +247,9 @@ interface ICoordinate {
   y: number;
 }
 
-Array.prototype.contains = function (item: ICoordinate) {
+Array.prototype.contains = function (item: ICoordinate, gutter: number = 5) {
   let filteredItem = this.forEach(function (i: ICoordinate) {
-    return i.x === item.x && i.y === item.y;
+    return Number(i.x - item.x) <= gutter && Number(i.y - item.y) <= gutter;
   })
   return filteredItem;
 }

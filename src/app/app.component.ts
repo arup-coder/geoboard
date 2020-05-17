@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
   private mouse: IMouse;
   private coordinates: ICoordinate[] = [];
   private pinCoordinates: ICoordinate[] = [];
+  private polygonCoordinates: ICoordinate[] = [];
   private cw: number;
   private ch: number;
 
@@ -41,12 +42,21 @@ export class AppComponent implements OnInit {
     this.pinCoordinates = this.drawBoard(this.canvasBg, this.contextBg, this.numOfPin);
 
     const midPos = Math.floor(this.pinCoordinates.length / 2);
-    
+
     this.drawBand(this.context,
-      this.pinCoordinates[midPos].x - this.pinRadius - 1,
-      this.pinCoordinates[midPos].y - this.pinRadius,
-      14,
-      this.canvas.getBoundingClientRect().height/this.numOfPin);
+      this.pinCoordinates[midPos].x - this.pinRadius + 2,
+      this.pinCoordinates[midPos].y - this.pinRadius + 1,
+      10,
+      Math.floor(this.canvas.getBoundingClientRect().height / this.numOfPin) - 2);
+
+    const gutter = this.canvas.getBoundingClientRect().width / (this.numOfPin + 1);
+    this.polygonCoordinates.push(
+      { x: this.pinCoordinates[midPos].x, y: this.pinCoordinates[midPos].y },
+      { x: this.pinCoordinates[midPos].x, y: this.pinCoordinates[midPos].y + gutter }
+    );
+
+    console.log(this.polygonCoordinates);
+    console.log(this.pinCoordinates);
   }
 
   initListeners(canvas: HTMLCanvasElement) {
@@ -64,23 +74,35 @@ export class AppComponent implements OnInit {
   }
 
   handleMouseDown(e: MouseEvent) {
-    this.draggable = true;
     this.mouse = this.getMousePos(this.canvas, e);
-
-    if (this.coordinates.length > 10) {
-      for (let index = 0; index < this.coordinates.length; index++) {
-        this.context.beginPath();
-        this.context.arc(this.coordinates[index].x, this.coordinates[index].y, 5, 0, 2 * Math.PI);
-        if (this.context.isPointInPath(this.mouse.x, this.mouse.y)) {
-          this.mouseIndex = index + 1;
-          break;
-        }
+    const isValidSelection = this.context.isPointInStroke(this.mouse.x, this.mouse.y);
+    // console.log(isValidSelection);
+    if (isValidSelection) {
+      this.draggable = true;
+      if (!this.polygonCoordinates.contains({ x: this.mouse.x, y: this.mouse.y })) {
+        console.log('true-----');
+        this.polygonCoordinates.push({ x: this.mouse.x, y: this.mouse.y });
+        console.log(this.polygonCoordinates);
       }
-    } else {
-      this.coordinates.push({ x: this.mouse.x, y: this.mouse.y });
-      this.drawPolygon();
-      this.drawPin(this.context, this.coordinates.length, this.coordinates);
+
+      // this.drawPolygon();
     }
+
+
+    // if (this.coordinates.length > 10) {
+    //   for (let index = 0; index < this.coordinates.length; index++) {
+    //     this.context.beginPath();
+    //     this.context.arc(this.coordinates[index].x, this.coordinates[index].y, 5, 0, 2 * Math.PI);
+    //     if (this.context.isPointInPath(this.mouse.x, this.mouse.y)) {
+    //       this.mouseIndex = index + 1;
+    //       break;
+    //     }
+    //   }
+    // } else {
+    //   this.coordinates.push({ x: this.mouse.x, y: this.mouse.y });
+    //   this.drawPolygon();
+    //   this.drawPin(this.context, this.coordinates.length, this.coordinates);
+    // }
   }
 
   handleMouseUp() {
@@ -92,33 +114,38 @@ export class AppComponent implements OnInit {
   handleouseMove(e: MouseEvent) {
     if (this.draggable) {
       this.mouse = this.getMousePos(this.canvas, e);
-      this.coordinates[this.mouseIndex - 1].x = this.mouse.x;
-      this.coordinates[this.mouseIndex - 1].y = this.mouse.y;
+      this.polygonCoordinates[this.polygonCoordinates.length - 1].x = this.mouse.x;
+      this.polygonCoordinates[this.polygonCoordinates.length - 1].y = this.mouse.y;
       this.drawPolygon();
-      this.drawPin(this.context, this.coordinates.length, this.coordinates);
+      // this.drawPin(this.context, this.coordinates.length, this.coordinates);
     }
   }
 
   drawPolygon() {
-    const len = this.coordinates.length;
+    const len = this.polygonCoordinates.length;
 
     this.context.clearRect(0, 0, this.cw, this.ch);
     this.context.strokeStyle = "orange";
     this.context.beginPath();
-    this.context.moveTo(this.coordinates[0].x, this.coordinates[0].y);
+    this.context.moveTo(this.polygonCoordinates[0].x, this.polygonCoordinates[0].y);
 
-    for (let index = 1; index < len; index++) {
-      this.context.lineTo(this.coordinates[index].x, this.coordinates[index].y);
+    for (let i = 1; i <= len; i++) {
+
+      if (i == len) {
+        this.context.lineTo(this.polygonCoordinates[0].x, this.polygonCoordinates[0].y);
+      } else {
+        this.context.lineTo(this.polygonCoordinates[i].x, this.polygonCoordinates[i].y);
+      }
     }
     this.context.stroke();
     this.context.closePath();
   }
 
-  drawPin(context: CanvasRenderingContext2D, 
-    numPin: number, 
-    coordinates: Array<ICoordinate>, 
+  drawPin(context: CanvasRenderingContext2D,
+    numPin: number,
+    coordinates: Array<ICoordinate>,
     shadow: boolean = false,
-    pinRadius:number = 6) {
+    pinRadius: number = 6) {
     for (let index = 0; index < numPin; index++) {
       context.strokeStyle = "white";
       context.beginPath();
@@ -160,7 +187,7 @@ export class AppComponent implements OnInit {
         }
       }
     }
-    this.drawPin(this.contextBg, 1, [{x: -10, y: -10}], true);
+    this.drawPin(this.contextBg, 1, [{ x: -10, y: -10 }], true);
     this.drawPin(this.contextBg, pinCoordinates.length, pinCoordinates, true);
     return pinCoordinates;
   }
@@ -174,37 +201,21 @@ export class AppComponent implements OnInit {
   }
 
   drawBand(context: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) {
-    let i: number, xPos: number, yPos: number, pi = Math.PI, twoPi = 2 * pi;
 
     context.beginPath();
     context.strokeStyle = "orange";
-
-    for (i = 0; i < twoPi; i += 0.001) {
-      xPos = (x + w / 2) - (w / 2 * Math.cos(i));
-      yPos = (y + h / 8) + (h / 8 * Math.sin(i));
-    }
+    context.lineWidth = 4;
 
     context.moveTo(x, y + h / 8);
     context.lineTo(x, y + h - h / 8);
-
-    for (i = 0; i < pi; i += 0.001) {
-      xPos = (x + w / 2) - (w / 2 * Math.cos(i));
-      yPos = (y + h - h / 8) + (h / 8 * Math.sin(i));
-
-      if (i === 0) {
-        context.moveTo(xPos, yPos);
-      } else {
-        context.lineTo(xPos, yPos);
-      }
-    }
     context.moveTo(x + w, y + h / 8);
     context.lineTo(x + w, y + h - h / 8);
 
     context.stroke();
-    context.closePath();
     context.shadowColor = "black";
     context.shadowOffsetX = 2;
-    context.shadowBlur = 2;
+    context.shadowBlur = 7;
+    context.closePath();
   }
 }
 
@@ -216,4 +227,11 @@ interface IMouse {
 interface ICoordinate {
   x: number;
   y: number;
+}
+
+Array.prototype.contains = function (item: ICoordinate) {
+  let filteredItem = this.forEach(function (i: ICoordinate) {
+    return i.x === item.x && i.y === item.y;
+  })
+  return filteredItem;
 }

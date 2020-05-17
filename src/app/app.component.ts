@@ -40,11 +40,11 @@ export class AppComponent implements OnInit {
 
     this.pinCoordinates = this.drawBoard(this.canvasBg, this.contextBg, this.numOfPin);
 
-    const midPos = Math.round(this.pinCoordinates.length / 2);
-    console.log(this.pinCoordinates);
+    const midPos = Math.floor(this.pinCoordinates.length / 2);
+    
     this.drawBand(this.context,
-      this.pinCoordinates[midPos - 1].x - this.pinRadius - 1,
-      this.pinCoordinates[midPos - 1].y - this.pinRadius,
+      this.pinCoordinates[midPos].x - this.pinRadius - 1,
+      this.pinCoordinates[midPos].y - this.pinRadius,
       14,
       this.canvas.getBoundingClientRect().height/this.numOfPin);
   }
@@ -160,15 +160,16 @@ export class AppComponent implements OnInit {
         }
       }
     }
+    this.drawPin(this.contextBg, 1, [{x: -10, y: -10}], true);
     this.drawPin(this.contextBg, pinCoordinates.length, pinCoordinates, true);
     return pinCoordinates;
   }
 
   getMousePos(canvas: HTMLCanvasElement, e: MouseEvent) {
-    const ClientRect = canvas.getBoundingClientRect();
+    const clientRect = canvas.getBoundingClientRect();
     return {
-      x: Math.round(e.clientX - ClientRect.left),
-      y: Math.round(e.clientY - ClientRect.top)
+      x: Math.round(e.clientX - clientRect.left),
+      y: Math.round(e.clientY - clientRect.top)
     };
   }
 

@@ -1,0 +1,11 @@
+.board {
+    width: 814px;
+    height: 934px;
+    background-image: url("src/assets/img/empty_board.png");
+}
+
+.bands {
+    display: flex;
+    width: 814px;
+    justify-content: space-between;
+}

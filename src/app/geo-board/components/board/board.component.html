@@ -1,0 +1,15 @@
+<div class="board">
+    <peg></peg>
+    <peg></peg>
+    <peg></peg>
+    <peg></peg>
+    <peg></peg>
+    <peg></peg>
+</div>
+
+<section class="bands">
+    <band
+        *ngFor="let band of bands"
+        [color]="band.color"
+        [disabled]="band.disabled"></band>
+</section>

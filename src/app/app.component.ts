@@ -117,7 +117,7 @@ export class AppComponent implements OnInit {
       } else {
         console.log('else');
         this.polygonCoordinates.splice(this.polygonCoordinates.length - 1, 1);
-        if(this.polygonCoordinates.length === 2){
+        if (this.polygonCoordinates.length === 2) {
           const midPos = Math.floor(this.pinCoordinates.length / 2);
           this.drawBand(this.context,
             this.pinCoordinates[midPos].x - this.pinRadius + 2,
@@ -166,18 +166,20 @@ export class AppComponent implements OnInit {
     numPin: number,
     coordinates: Array<ICoordinate>,
     shadow: boolean = false,
-    pinRadius: number = 6) {
+    pinRadius: number = 10) {
     for (let index = 0; index < numPin; index++) {
       context.lineWidth = 2;
+      context.fillStyle = "#274b59";
       context.strokeStyle = "white";
       context.beginPath();
       context.arc(coordinates[index].x, coordinates[index].y, pinRadius, 0, 2 * Math.PI);
       context.fill();
       context.stroke();
       if (shadow) {
-        context.shadowColor = "black";
-        context.shadowOffsetX = 1;
-        context.shadowBlur = 7;
+        context.shadowColor = 'rgba(30, 30, 30, .3)';
+        context.shadowOffsetX = 3;
+        context.shadowOffsetY = 3;
+        context.shadowBlur = 5;
       }
 
     }
@@ -254,9 +256,15 @@ interface ICoordinate {
 Array.prototype.contains = function (item: ICoordinate) {
   console.log('item');
   console.log(item);
-  let filteredItem = false; 
+  let filteredItem = false;
   this.forEach(function (i: ICoordinate) {
-    if(i.x === item.x && i.y === item.y){
+
+    // if(i.x === item.x && i.y === item.y){
+    //   filteredItem = true;
+    // }
+
+    if (((i.x === item.x) || (item.x > i.x && item.x < i.x + 10) || (item.x < i.x && item.x > i.x - 10)) &&
+      ((i.y === item.y) || (item.y > i.y && item.y < i.y + 10) || (item.y < i.y && item.y > i.y - 10))) {
       filteredItem = true;
     }
   })

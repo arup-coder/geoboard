@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
     this.canvasBg = document.getElementById("canvasbg") as HTMLCanvasElement;
     this.contextBg = this.canvasBg.getContext("2d");
 
-    this.context.lineWidth = 2;
+    this.context.lineWidth = 4;
     this.context.strokeStyle = "black";
     this.cw = this.canvas.width;
     this.ch = this.canvas.height;
@@ -79,17 +79,14 @@ export class AppComponent implements OnInit {
     console.log(isValidSelection);
     if (isValidSelection) {
       this.draggable = true;
-      if (!this.polygonCoordinates.contains({ x: this.mouse.x, y: this.mouse.y })) {
+      if (!this.polygonCoordinates['contains']({ x: this.mouse.x, y: this.mouse.y })) {
         console.log('true-----');
         this.polygonCoordinates.push({ x: this.mouse.x, y: this.mouse.y });
         console.log(this.polygonCoordinates);
         this.drawPin(this.context, this.polygonCoordinates.length, this.polygonCoordinates, true, 5);
       }
-
       // this.drawPolygon();
     }
-
-
     // if (this.coordinates.length > 10) {
     //   for (let index = 0; index < this.coordinates.length; index++) {
     //     this.context.beginPath();
@@ -109,11 +106,10 @@ export class AppComponent implements OnInit {
   handleMouseUp() {
     if (this.draggable) {
       this.draggable = false;
-      console.log('handleMouseUp');
-      if (this.pinCoordinates.contains(this.polygonCoordinates[this.polygonCoordinates.length - 1])) {
+      if (this.pinCoordinates['contains'](this.polygonCoordinates[this.polygonCoordinates.length - 1])) {
         console.log('if');
         this.drawPolygon();
-        this.drawPin(this.context, this.polygonCoordinates.length, this.polygonCoordinates, true, 5);
+        // this.drawPin(this.context, this.polygonCoordinates.length, this.polygonCoordinates, true, 5);
       } else {
         console.log('else');
         this.polygonCoordinates.splice(this.polygonCoordinates.length - 1, 1);
@@ -127,7 +123,6 @@ export class AppComponent implements OnInit {
         } else {
           this.drawPolygon();
         }
-
       }
     }
   }
@@ -151,7 +146,6 @@ export class AppComponent implements OnInit {
     this.context.moveTo(this.polygonCoordinates[0].x, this.polygonCoordinates[0].y);
 
     for (let i = 1; i <= len; i++) {
-
       if (i == len) {
         this.context.lineTo(this.polygonCoordinates[0].x, this.polygonCoordinates[0].y);
       } else {
@@ -228,7 +222,7 @@ export class AppComponent implements OnInit {
     this.context.clearRect(0, 0, this.cw, this.ch);
     context.beginPath();
     context.strokeStyle = "orange";
-    context.lineWidth = 3;
+    context.lineWidth = 4;
 
     context.moveTo(x, y + h / 8);
     context.lineTo(x, y + h - h / 8);
@@ -239,7 +233,7 @@ export class AppComponent implements OnInit {
     context.shadowColor = "black";
     context.shadowOffsetX = 0;
     context.shadowBlur = 0;
-    context.closePath();
+    // context.closePath();
   }
 }
 
@@ -253,15 +247,11 @@ interface ICoordinate {
   y: number;
 }
 
-Array.prototype.contains = function (item: ICoordinate) {
+Array.prototype['contains'] = function (item: ICoordinate) {
   console.log('item');
   console.log(item);
   let filteredItem = false;
   this.forEach(function (i: ICoordinate) {
-
-    // if(i.x === item.x && i.y === item.y){
-    //   filteredItem = true;
-    // }
 
     if (((i.x === item.x) || (item.x > i.x && item.x < i.x + 10) || (item.x < i.x && item.x > i.x - 10)) &&
       ((i.y === item.y) || (item.y > i.y && item.y < i.y + 10) || (item.y < i.y && item.y > i.y - 10))) {

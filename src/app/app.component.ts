@@ -85,33 +85,15 @@ export class AppComponent implements OnInit {
         console.log(this.polygonCoordinates);
         this.drawPin(this.context, this.polygonCoordinates.length, this.polygonCoordinates, true, 5);
       }
-      // this.drawPolygon();
     }
-    // if (this.coordinates.length > 10) {
-    //   for (let index = 0; index < this.coordinates.length; index++) {
-    //     this.context.beginPath();
-    //     this.context.arc(this.coordinates[index].x, this.coordinates[index].y, 5, 0, 2 * Math.PI);
-    //     if (this.context.isPointInPath(this.mouse.x, this.mouse.y)) {
-    //       this.mouseIndex = index + 1;
-    //       break;
-    //     }
-    //   }
-    // } else {
-    //   this.coordinates.push({ x: this.mouse.x, y: this.mouse.y });
-    //   this.drawPolygon();
-    //   this.drawPin(this.context, this.coordinates.length, this.coordinates);
-    // }
   }
 
   handleMouseUp() {
     if (this.draggable) {
       this.draggable = false;
       if (this.pinCoordinates['contains'](this.polygonCoordinates[this.polygonCoordinates.length - 1])) {
-        console.log('if');
         this.drawPolygon();
-        // this.drawPin(this.context, this.polygonCoordinates.length, this.polygonCoordinates, true, 5);
       } else {
-        console.log('else');
         this.polygonCoordinates.splice(this.polygonCoordinates.length - 1, 1);
         if (this.polygonCoordinates.length === 2) {
           const midPos = Math.floor(this.pinCoordinates.length / 2);
@@ -142,6 +124,7 @@ export class AppComponent implements OnInit {
 
     this.context.clearRect(0, 0, this.cw, this.ch);
     this.context.strokeStyle = "orange";
+    this.context.lineWidth = 5;
     this.context.beginPath();
     this.context.moveTo(this.polygonCoordinates[0].x, this.polygonCoordinates[0].y);
 
@@ -222,7 +205,7 @@ export class AppComponent implements OnInit {
     this.context.clearRect(0, 0, this.cw, this.ch);
     context.beginPath();
     context.strokeStyle = "orange";
-    context.lineWidth = 4;
+    context.lineWidth = 5;
 
     context.moveTo(x, y + h / 8);
     context.lineTo(x, y + h - h / 8);
@@ -233,7 +216,7 @@ export class AppComponent implements OnInit {
     context.shadowColor = "black";
     context.shadowOffsetX = 0;
     context.shadowBlur = 0;
-    // context.closePath();
+    context.closePath();
   }
 }
 
@@ -248,8 +231,8 @@ interface ICoordinate {
 }
 
 Array.prototype['contains'] = function (item: ICoordinate) {
-  console.log('item');
-  console.log(item);
+  // console.log('item');
+  // console.log(item);
   let filteredItem = false;
   this.forEach(function (i: ICoordinate) {
 

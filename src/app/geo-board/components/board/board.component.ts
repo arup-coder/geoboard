@@ -50,11 +50,16 @@ export class BoardComponent implements OnInit {
   private ch: number;
 
   ngOnInit() {
-    this.init();
+    this.preInitActivities();
     this.initListeners(this.canvas);
   }
 
-  init() {
+  bandDrop() {
+    this.bands[0].disabled = true;
+    this.init();
+  }
+
+  preInitActivities() {
     this.canvas = document.getElementById("canvas") as HTMLCanvasElement;
     this.context = this.canvas.getContext("2d");
     this.canvasBg = document.getElementById("canvasbg") as HTMLCanvasElement;
@@ -66,7 +71,9 @@ export class BoardComponent implements OnInit {
     this.ch = this.canvas.height;
 
     this.pinCoordinates = this.drawBoard(this.canvasBg, this.contextBg, this.numOfPin);
+  }
 
+  init() {
     const midPos = Math.floor(this.pinCoordinates.length / 2);
 
     this.drawBand(this.context,
@@ -251,9 +258,6 @@ export class BoardComponent implements OnInit {
     context.lineTo(x + w, y + h - h / 8);
 
     context.stroke();
-    // context.shadowColor = "black";
-    // context.shadowOffsetX = 0;
-    // context.shadowBlur = 0;
     context.closePath();
   }
 

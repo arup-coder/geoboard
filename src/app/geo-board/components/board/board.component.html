@@ -1,11 +1,11 @@
-<div class="board">
+<div class="board" cdkDropList (cdkDropListDropped)="bandDrop()">
     <canvas id="canvasbg" width=800 height=800 class="canvas event-none"></canvas>
     <canvas id="canvas" width=800 height=800 class="canvas z-index-1"></canvas>
     <section class="bands">
         <band
+            cdkDrag
             *ngFor="let band of bands"
             [color]="band.color"
-            [disabled]="band.disabled"></band>
+            [cdkDragDisabled]="band.disabled"></band>
     </section>
 </div>
-

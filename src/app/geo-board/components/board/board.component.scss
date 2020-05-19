@@ -28,3 +28,11 @@
 .event-none {
   pointer-events: none;
 }
+
+band:hover {
+  cursor: grab;
+}
+
+band.cdk-drag-disabled:hover {
+  cursor: default;
+}

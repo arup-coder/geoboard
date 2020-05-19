@@ -5,14 +5,10 @@ import { Component, OnInit, Input } from '@angular/core';
   templateUrl: './band.component.html',
   styleUrls: ['./band.component.scss']
 })
-export class BandComponent implements OnInit {
+export class BandComponent {
 
   @Input() color: string;
-  @Input() disabled: boolean;
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
 }

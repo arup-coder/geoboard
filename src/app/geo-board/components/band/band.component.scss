@@ -5,11 +5,3 @@
   border: 9px solid;
   border-color: black;
 }
-
-.band:hover {
-  cursor: grab;
-}
-
-.band.cdk-drag-disabled:hover {
-  cursor: default;
-}

@@ -1,11 +1,30 @@
 .board {
-    width: 814px;
-    height: 934px;
-    background-image: url("src/assets/img/empty_board.png");
+  position: absolute;
+  width: 814px;
+  height: 934px;
+  background-image: url("src/assets/img/empty_board.png");
+  z-index: -2;
 }
 
 .bands {
-    display: flex;
-    width: 814px;
-    justify-content: space-between;
+  position: absolute;
+  bottom: -40px;
+  padding-bottom: 20px;
+  display: flex;
+  width: 814px;
+  justify-content: space-between;
+}
+
+.canvas {
+  position: absolute;
+  top: 83px;
+  left: 6px;
+}
+
+.z-index-1 {
+  z-index: -1;
+}
+
+.event-none {
+  pointer-events: none;
 }

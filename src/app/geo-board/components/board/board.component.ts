@@ -60,13 +60,13 @@ export class BoardComponent implements OnInit {
   }
 
   preInitActivities() {
-    this.canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    this.context = this.canvas.getContext("2d");
-    this.canvasBg = document.getElementById("canvasbg") as HTMLCanvasElement;
-    this.contextBg = this.canvasBg.getContext("2d");
+    this.canvas = document.getElementById('canvas') as HTMLCanvasElement;
+    this.context = this.canvas.getContext('2d');
+    this.canvasBg = document.getElementById('canvasbg') as HTMLCanvasElement;
+    this.contextBg = this.canvasBg.getContext('2d');
 
     this.context.lineWidth = 4;
-    this.context.strokeStyle = "black";
+    this.context.strokeStyle = 'black';
     this.cw = this.canvas.width;
     this.ch = this.canvas.height;
 
@@ -94,15 +94,15 @@ export class BoardComponent implements OnInit {
 
   initListeners(canvas: HTMLCanvasElement) {
 
-    canvas.addEventListener("mousedown", (e: MouseEvent) => {
+    canvas.addEventListener('mousedown', (e: MouseEvent) => {
       this.handleMouseDown(e);
     });
 
-    canvas.addEventListener("mouseup", () => {
+    canvas.addEventListener('mouseup', () => {
       this.handleMouseUp();
     });
 
-    canvas.addEventListener("mousemove", (e: MouseEvent) => {
+    canvas.addEventListener('mousemove', (e: MouseEvent) => {
       this.handleouseMove(e);
     });
   }
@@ -158,13 +158,13 @@ export class BoardComponent implements OnInit {
     const len = this.polygonCoordinates.length;
 
     this.context.clearRect(0, 0, this.cw, this.ch);
-    this.context.strokeStyle = "#79539d";
+    this.context.strokeStyle = '#79539d';
     this.context.lineWidth = 7;
     this.context.beginPath();
     this.context.moveTo(this.polygonCoordinates[0].x, this.polygonCoordinates[0].y);
 
     for (let i = 1; i <= len; i++) {
-      if (i == len) {
+      if (i === len) {
         this.context.lineTo(this.polygonCoordinates[0].x, this.polygonCoordinates[0].y);
       } else {
         this.context.lineTo(this.polygonCoordinates[i].x, this.polygonCoordinates[i].y);
@@ -185,8 +185,8 @@ export class BoardComponent implements OnInit {
 
     for (let index = 0; index < numPin; index++) {
       context.lineWidth = 3;
-      context.fillStyle = "#274b59";
-      context.strokeStyle = "white";
+      context.fillStyle = '#274b59';
+      context.strokeStyle = 'white';
       context.beginPath();
       context.arc(coordinates[index].x, coordinates[index].y, pinRadius, 0, 2 * Math.PI);
       context.fill();
@@ -211,8 +211,8 @@ export class BoardComponent implements OnInit {
     const size = numOfPin + 1;
     const ClientRect = canvas.getBoundingClientRect();
     const squareSize = Math.round(ClientRect.width / size);
-    let context = ctx;
-    let pinCoordinates: ICoordinate[] = [];
+    const context = ctx;
+    const pinCoordinates: ICoordinate[] = [];
     let i: number;
     let j: number;
 
@@ -249,7 +249,7 @@ export class BoardComponent implements OnInit {
 
     this.context.clearRect(0, 0, this.cw, this.ch);
     context.beginPath();
-    context.strokeStyle = "#79539d";
+    context.strokeStyle = '#79539d';
     context.lineWidth = 7;
 
     context.moveTo(x, y + h / 8);
@@ -273,17 +273,17 @@ interface ICoordinate {
   y: number;
 }
 
-Array.prototype['contains'] = function (item: ICoordinate) {
+Array.prototype['contains'] = function(item: ICoordinate) {
 
   let filteredItem = false;
 
-  this.forEach(function (i: ICoordinate) {
+  this.forEach((i: ICoordinate) => {
     if (((i.x === item.x) || (item.x > i.x && item.x < i.x + 10) || (item.x < i.x && item.x > i.x - 10)) &&
       ((i.y === item.y) || (item.y > i.y && item.y < i.y + 10) || (item.y < i.y && item.y > i.y - 10))) {
       filteredItem = true;
     }
-  })
+  });
 
   return filteredItem;
-}
+};
 

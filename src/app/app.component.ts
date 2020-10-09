@@ -85,25 +85,7 @@ export class AppComponent implements OnInit {
         console.log(this.polygonCoordinates);
         this.drawPin(this.context, this.polygonCoordinates.length, this.polygonCoordinates, true, 5);
       }
-
-      // this.drawPolygon();
     }
-
-
-    // if (this.coordinates.length > 10) {
-    //   for (let index = 0; index < this.coordinates.length; index++) {
-    //     this.context.beginPath();
-    //     this.context.arc(this.coordinates[index].x, this.coordinates[index].y, 5, 0, 2 * Math.PI);
-    //     if (this.context.isPointInPath(this.mouse.x, this.mouse.y)) {
-    //       this.mouseIndex = index + 1;
-    //       break;
-    //     }
-    //   }
-    // } else {
-    //   this.coordinates.push({ x: this.mouse.x, y: this.mouse.y });
-    //   this.drawPolygon();
-    //   this.drawPin(this.context, this.coordinates.length, this.coordinates);
-    // }
   }
 
   handleMouseUp() {
